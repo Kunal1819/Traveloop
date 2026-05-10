@@ -13,8 +13,8 @@ const navigation = [
 
 export function Sidebar({ className }) {
   return (
-    <div className={cn("flex h-full w-64 flex-col border-r border-slate-200 bg-white", className)}>
-      <div className="flex h-16 shrink-0 items-center px-6 border-b border-slate-200 bg-white">
+    <div className={cn("flex h-full w-64 flex-col border-r border-slate-200 bg-slate-50", className)}>
+      <div className="flex h-16 shrink-0 items-center px-6 border-b border-slate-200 bg-slate-50">
         <span className="text-xl font-bold tracking-tighter text-indigo-600">Traveloop.</span>
       </div>
       <nav className="flex flex-1 flex-col gap-y-1 p-4 overflow-y-auto">

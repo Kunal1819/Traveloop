@@ -12,10 +12,17 @@ export function DashboardScreen() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleFilter = (filter) => {
     setActiveFilter(activeFilter === filter ? null : filter);
   };
+
+  const filteredTrips = trips.filter(trip =>
+    trip.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const previousTrips = filteredTrips.filter(t => t.endDate < new Date().toISOString().split('T')[0]);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
@@ -37,7 +44,9 @@ export function DashboardScreen() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <Input 
               className="pl-10 h-10 border-slate-300 rounded-lg w-full" 
-              placeholder="Search bar ......" 
+              placeholder="Search trips..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <Button 
@@ -78,7 +87,7 @@ export function DashboardScreen() {
         </section>
 
         {/* Previous Trips Section */}
-        {trips.filter(t => t.endDate < new Date().toISOString().split('T')[0]).length > 0 && (
+        {previousTrips.length > 0 && (
           <section className="space-y-6 pb-24">
             <div className="flex items-center gap-4">
               <h3 className="text-xl font-bold whitespace-nowrap">Previous Trips</h3>
@@ -86,7 +95,7 @@ export function DashboardScreen() {
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              {trips.filter(t => t.endDate < new Date().toISOString().split('T')[0]).slice(0, 3).map((trip) => (
+              {previousTrips.slice(0, 3).map((trip) => (
                 <Card key={trip.id} onClick={() => navigate(`/trips/${trip.id}/view`)} className="cursor-pointer hover:border-indigo-600 transition-colors aspect-[3/4] border-slate-200 rounded-3xl shadow-sm bg-white flex items-center justify-center p-6 text-center">
                   <h4 className="text-2xl font-black uppercase tracking-tight text-slate-800">{trip.name}</h4>
                 </Card>

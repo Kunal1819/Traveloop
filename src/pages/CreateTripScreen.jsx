@@ -17,9 +17,12 @@ export function CreateTripScreen() {
   const handleSave = (e) => {
     e.preventDefault();
     const newErrors = {};
-    if (!startDate) newErrors.startDate = true;
-    if (!endDate) newErrors.endDate = true;
-    if (!name) newErrors.name = true;
+    if (!startDate) newErrors.startDate = "Start date is required";
+    if (!endDate) newErrors.endDate = "End date is required";
+    if (!name) newErrors.name = "Trip name is required";
+    if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
+      newErrors.endDate = "End date must be after start date";
+    }
     
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -55,13 +58,15 @@ export function CreateTripScreen() {
         <form onSubmit={handleSave} className="max-w-xl space-y-4">
           <div className="flex items-center gap-6">
             <label className="w-32 text-sm font-bold">Start Date:</label>
-            <Input 
-              type="date"
-              className="flex-1 h-10 border-slate-300 rounded-lg"
-              value={startDate}
-              onChange={(e) => { setStartDate(e.target.value); setErrors({...errors, startDate: false}); }}
-              error={errors.startDate}
-            />
+            <div className="flex-1">
+              <Input 
+                type="date"
+                className="h-10 border-slate-300 rounded-lg w-full"
+                value={startDate}
+                onChange={(e) => { setStartDate(e.target.value); setErrors({...errors, startDate: ""}); }}
+              />
+              {errors.startDate && <p className="text-red-500 text-xs mt-1">{errors.startDate}</p>}
+            </div>
           </div>
           <div className="flex items-center gap-6">
             <label className="w-32 text-sm font-bold">Select a Place :</label>
@@ -74,24 +79,28 @@ export function CreateTripScreen() {
           </div>
           <div className="flex items-center gap-6">
             <label className="w-32 text-sm font-bold">Trip Name:</label>
-            <Input 
-              type="text"
-              placeholder="Enter trip name"
-              className="flex-1 h-10 border-slate-300 rounded-lg"
-              value={name}
-              onChange={(e) => { setName(e.target.value); setErrors({...errors, name: false}); }}
-              error={errors.name}
-            />
+            <div className="flex-1">
+              <Input 
+                type="text"
+                placeholder="Enter trip name"
+                className="h-10 border-slate-300 rounded-lg w-full"
+                value={name}
+                onChange={(e) => { setName(e.target.value); setErrors({...errors, name: ""}); }}
+              />
+              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+            </div>
           </div>
           <div className="flex items-center gap-6">
             <label className="w-32 text-sm font-bold">End Date:</label>
-            <Input 
-              type="date"
-              className="flex-1 h-10 border-slate-300 rounded-lg"
-              value={endDate}
-              onChange={(e) => { setEndDate(e.target.value); setErrors({...errors, endDate: false}); }}
-              error={errors.endDate}
-            />
+            <div className="flex-1">
+              <Input 
+                type="date"
+                className="h-10 border-slate-300 rounded-lg w-full"
+                value={endDate}
+                onChange={(e) => { setEndDate(e.target.value); setErrors({...errors, endDate: ""}); }}
+              />
+              {errors.endDate && <p className="text-red-500 text-xs mt-1">{errors.endDate}</p>}
+            </div>
           </div>
           <div className="flex items-center gap-6">
             <label className="w-32 text-sm font-bold">Cover Photo:</label>
